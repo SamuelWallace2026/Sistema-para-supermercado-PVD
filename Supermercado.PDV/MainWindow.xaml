@@ -1,0 +1,176 @@
+﻿<Window x:Class="Supermercado.PDV.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Supermercado - Frente de Caixa (PDV)" 
+        Height="768" Width="1024"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Background="#002244">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- TOPO: STATUS DO CAIXA E OPERADOR -->
+        <Border Grid.Row="0" Background="White" Margin="0,0,0,10" Padding="10">
+            <Grid>
+                <TextBlock Text="CAIXA ABERTO" Foreground="#002244" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="Caixa: 01 | Operador: João" Foreground="#555555" FontSize="14" FontWeight="SemiBold"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock x:Name="lblCpfCliente" Text="CPF na Nota: Não informado" Foreground="#0066CC" FontSize="14" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- CORPO PRINCIPAL -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*"/> <!-- Lado Esquerdo -->
+                <ColumnDefinition Width="6.5*"/> <!-- Lado Direito -->
+            </Grid.ColumnDefinitions>
+
+            <!-- ================= LADO ESQUERDO ================= -->
+            <Grid Grid.Column="0" Margin="0,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/> <!-- Logo -->
+                    <RowDefinition Height="Auto"/> <!-- Código de Barras -->
+                    <RowDefinition Height="Auto"/> <!-- Valor Unitário -->
+                    <RowDefinition Height="Auto"/> <!-- Total do Item -->
+                </Grid.RowDefinitions>
+
+                <!-- LOGO -->
+                <Border Grid.Row="0" Background="White" Margin="0,0,0,10">
+                    <Grid>
+                        <Image Source="carrinho.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- CÓDIGO DE BARRAS -->
+                <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                    <TextBlock Text="CÓDIGO DE BARRAS / PESQUISA" Foreground="White" FontWeight="Bold" FontSize="12" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtCodigoBarras" Height="40" FontSize="22" VerticalContentAlignment="Center" KeyDown="TxtCodigoBarras_KeyDown"/>
+                </StackPanel>
+
+                <!-- VALOR UNITÁRIO -->
+                <Border Grid.Row="2" Background="#0A3055" Height="80" Margin="0,0,0,10" Padding="10">
+                    <Grid>
+                        <TextBlock Text="VALOR UNITÁRIO" Foreground="#7A99B8" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblValorUnitario" Text="R$ 0,00" Foreground="White" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </Border>
+
+                <!-- TOTAL DO ITEM -->
+                <Border Grid.Row="3" Background="#0A3055" Height="80" Padding="10">
+                    <Grid>
+                        <TextBlock Text="TOTAL DO ITEM" Foreground="#7A99B8" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblTotalItem" Text="R$ 0,00" Foreground="#FF3333" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ================= LADO DIREITO ================= -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/> <!-- Tabela -->
+                    <RowDefinition Height="Auto"/> <!-- Subtotal, Recebido e Troco -->
+                </Grid.RowDefinitions>
+
+                <!-- TABELA -->
+                <DataGrid x:Name="dgItensVenda" Grid.Row="0" Background="White" AutoGenerateColumns="False" 
+                          IsReadOnly="True" CanUserAddRows="False" HeadersVisibility="Column" 
+                          GridLinesVisibility="None" RowBackground="White" AlternatingRowBackground="#F9F9F9"
+                          BorderThickness="0" Margin="0,0,0,10" FontSize="14" RowHeight="28">
+                    
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#F0F0F0"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Padding" Value="5"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nº Item" Binding="{Binding ItemNumero}" Width="70"/>
+                        <DataGridTextColumn Header="Código" Binding="{Binding ProdutoId}" Width="80"/>
+                        <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="*"/>
+                        <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="60"/>
+                        <DataGridTextColumn Header="Vlr. Unit." Binding="{Binding ValorUnitario, StringFormat=C}" Width="110"/>
+                        <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat=C}" Width="110"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- SUBTOTAL, RECEBIDO E TROCO -->
+                <Grid Grid.Row="1" Height="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- SUBTOTAL -->
+                    <Border Grid.Column="0" Background="White" Margin="0,0,10,0" Padding="10">
+                        <Grid>
+                            <TextBlock Text="SUBTOTAL" Foreground="#002244" FontSize="12" FontWeight="Bold"/>
+                            <TextBlock x:Name="lblSubtotal" Text="0,00" Foreground="#004488" FontSize="48" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- TOTAL RECEBIDO -->
+                    <Border Grid.Column="1" Background="#0A3055" Margin="0,0,10,0" Padding="10">
+                        <Grid>
+                            <TextBlock Text="TOTAL RECEBIDO" Foreground="#7A99B8" FontSize="12" FontWeight="Bold"/>
+                            <TextBlock x:Name="lblTotalRecebido" Text="R$ 0,00" Foreground="White" FontSize="26" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- TROCO -->
+                    <Border Grid.Column="2" Background="#0A3055" Padding="10">
+                        <Grid>
+                            <TextBlock Text="TROCO" Foreground="#7A99B8" FontSize="12" FontWeight="Bold"/>
+                            <TextBlock x:Name="lblTroco" Text="R$ 0,00" Foreground="#00FF00" FontSize="26" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- ================= RODAPÉ (ATALHOS PROFISSIONAIS) ================= -->
+        <Border Grid.Row="2" Background="#001428" Padding="8" Margin="0,10,0,0" CornerRadius="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="[F2] Pesquisar Produto" Foreground="White" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                    <TextBlock Text="[F11] Excluir Item" Foreground="#FF8888" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="[F5] Nova Venda" Foreground="#55FF55" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                    <TextBlock Text="[Ctrl+D] CPF na Nota" Foreground="White" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="[F9] Alterar Qtd" Foreground="White" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                    <TextBlock Text="[ESC] Sair / Cancelar" Foreground="#FF8888" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3">
+                    <TextBlock Text="[F12] Finalizar Venda" Foreground="#55FF55" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                    <TextBlock Text="[F6] Pagar Item Específico" Foreground="#FF8888" FontSize="12" FontWeight="Bold" Margin="0,2"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

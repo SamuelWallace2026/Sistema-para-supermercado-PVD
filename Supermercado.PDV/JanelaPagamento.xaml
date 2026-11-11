@@ -1,0 +1,103 @@
+<Window x:Class="Supermercado.PDV.JanelaPagamento"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FECHAMENTO DE VENDA - PAGAMENTO MÚLTIPLO" Height="650" Width="580"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#F4F6F9">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- CABEÇALHO COM TOTAL E RESTANTE -->
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#002244" Padding="15" CornerRadius="6">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="TOTAL A PAGAR" Foreground="#A0C4FF" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="lblTotalPagar" Text="R$ 0,00" Foreground="White" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" x:Name="brdRestante" Background="#842029" Padding="15" CornerRadius="6">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="FALTA PAGAR" Foreground="#F8D7DA" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="lblFaltaPagar" Text="R$ 0,00" Foreground="White" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- INPUT DE PAGAMENTO PARCIAL -->
+        <Border Grid.Row="1" Background="#FFFFFF" BorderBrush="#DEE2E6" BorderThickness="1" Padding="15" CornerRadius="6" Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Forma de Pagamento:" FontSize="13" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="cbFormaPagamento" Height="40" FontSize="14" FontWeight="Bold" VerticalContentAlignment="Center">
+                        <ComboBoxItem Content="Dinheiro" IsSelected="True"/>
+                        <ComboBoxItem Content="Cartão de Débito"/>
+                        <ComboBoxItem Content="Cartão de Crédito"/>
+                        <ComboBoxItem Content="PIX"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Valor (R$):" FontSize="13" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtValorAdicionar" Height="40" FontSize="16" FontWeight="Bold" VerticalContentAlignment="Center" KeyDown="TxtValorAdicionar_KeyDown"/>
+                </StackPanel>
+
+                <Button Grid.Column="4" Content="Adicionar [ENTER]" Width="130" Height="40" VerticalAlignment="Bottom" Background="#0D6EFD" Foreground="White" FontWeight="Bold" BorderThickness="0" Click="BtnAdicionarPagamento_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- LISTA DE PAGAMENTOS INSERIDOS -->
+        <TextBlock Grid.Row="2" Text="Pagamentos Lançados no Cupom:" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+        
+        <DataGrid Grid.Row="3" x:Name="dgPagamentos" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="White" BorderBrush="#DEE2E6" FontSize="14">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Forma de Pagamento" Binding="{Binding Forma}" Width="*"/>
+                <DataGridTextColumn Header="Valor (R$)" Binding="{Binding Valor, StringFormat=C2}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- EXIBIÇÃO DE TROCO -->
+        <Grid Grid.Row="4" Margin="0,15,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <Button Content="[F11] Remover Selecionado" Background="#DC3545" Foreground="White" FontWeight="Bold" Height="36" Width="200" HorizontalAlignment="Left" BorderThickness="0" Click="BtnRemoverPagamento_Click"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                <TextBlock Text="Troco:" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <TextBlock x:Name="lblTroco" Text="R$ 0,00" FontSize="24" FontWeight="Bold" Foreground="#198754" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- BOTÕES DE AÇÃO -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancelar [ESC]" Width="130" Height="42" Margin="0,0,12,0" Background="#6C757D" Foreground="White" FontWeight="Bold" BorderThickness="0" Click="BtnCancelar_Click"/>
+            <Button x:Name="btnFinalizar" Content="Finalizar Venda [F12]" Width="180" Height="42" Background="#198754" Foreground="White" FontWeight="Bold" BorderThickness="0" Click="BtnFinalizar_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
