@@ -1,7 +1,7 @@
 <Window x:Class="Supermercado.PDV.JanelaLogin"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Login do Sistema - SUPERMERCADO SUPERFORQUILHA" Height="340" Width="440"
+        Title="Login do Sistema - SUPERMERCADO " Height="340" Width="440"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="#F4F6F9">
 
     <Grid Margin="25,20,25,20">
@@ -9,7 +9,7 @@
             <!-- CABEÇALHO -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                 <TextBlock Text="🔐" FontSize="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                <TextBlock Text="SUPERFORQUILHA" FontSize="18" FontWeight="Bold" Foreground="#198754" VerticalAlignment="Center"/>
+                <TextBlock Text="SUPERMERCADO" FontSize="18" FontWeight="Bold" Foreground="#198754" VerticalAlignment="Center"/>
             </StackPanel>
 
             <!-- USUÁRIO -->
