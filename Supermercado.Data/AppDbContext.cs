@@ -16,7 +16,7 @@ public class AppDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            var connectionString = "Server=localhost;Database=supermercado_db;User=root;Password=root;";
+            var connectionString = 
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
     }
